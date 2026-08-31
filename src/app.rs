@@ -72,7 +72,7 @@ impl eframe::App for MandelApp {
     fn save(&mut self, _storage: &mut dyn eframe::Storage) {}
 
     fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
-        Panel::left("left_panel").show_inside(ui, |ui| {
+        Panel::left("left_panel").show(ui, |ui| {
             ui.heading("Mandelbrot Settings");
             ui.label("Max iterations");
             ui.add(Slider::new(
@@ -152,12 +152,12 @@ impl eframe::App for MandelApp {
                 .default_size(ui.available_size().x * 0.5)
                 .max_size(ui.available_size().x * 0.8)
                 .frame(Frame::side_top_panel(&Style::default()).inner_margin(0.0))
-                .show_inside(ui, |ui| {
+                .show(ui, |ui| {
                     self.ui_juliaset(ui);
                 });
         }
 
-        CentralPanel::no_frame().show_inside(ui, |ui| {
+        CentralPanel::no_frame().show(ui, |ui| {
             self.ui_mandelbrot(ui);
         });
 
