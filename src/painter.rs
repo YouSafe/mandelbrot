@@ -106,18 +106,11 @@ impl FractalPainter {
                     multiview_mask: None,
                 });
 
-        if !render_state
+        render_state
             .renderer
             .write()
             .callback_resources
-            .contains::<PainterResources>()
-        {
-            render_state
-                .renderer
-                .write()
-                .callback_resources
-                .insert(PainterResources { pipeline });
-        }
+            .insert(PainterResources { pipeline });
 
         Self {
             bind_group,

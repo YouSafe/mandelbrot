@@ -3,4 +3,5 @@
 mod app;
 mod camera;
 mod painter;
-pub use app::TemplateApp;
+
+pub use app::MandelApp;

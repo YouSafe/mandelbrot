@@ -33,7 +33,7 @@ impl Default for JuliaSetBrotSettings {
     }
 }
 
-pub struct TemplateApp {
+pub struct MandelApp {
     juliaset_painter: FractalPainter,
     juliaset_settings: JuliaSetBrotSettings,
     juliaset_camera: Camera,
@@ -44,7 +44,7 @@ pub struct TemplateApp {
     frames: u32,
 }
 
-impl TemplateApp {
+impl MandelApp {
     pub fn new(cc: &eframe::CreationContext<'_>) -> Self {
         let render_state = cc
             .wgpu_render_state
@@ -68,7 +68,7 @@ impl TemplateApp {
     }
 }
 
-impl eframe::App for TemplateApp {
+impl eframe::App for MandelApp {
     fn save(&mut self, _storage: &mut dyn eframe::Storage) {}
 
     fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
@@ -165,7 +165,7 @@ impl eframe::App for TemplateApp {
     }
 }
 
-impl TemplateApp {
+impl MandelApp {
     fn ui_mandelbrot(&mut self, ui: &mut egui::Ui) {
         let (rect, response) = ui.allocate_exact_size(ui.available_size(), Sense::drag());
 
