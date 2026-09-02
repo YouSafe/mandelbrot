@@ -171,43 +171,16 @@ impl MandelApp {
 
         let ctx = ui.ctx();
 
-        if response.dragged_by(egui::PointerButton::Secondary) {
-            let mouse_pos = ctx
-                .input(|i| i.pointer.interact_pos())
-                .expect("must be defined inside rect");
-
+        if response.dragged_by(egui::PointerButton::Secondary)
+            && let Some(mouse_pos) = ctx.input(|i| i.pointer.interact_pos())
+        {
+            // if mouse is still over egui area
             self.juliaset_settings.point_c = self
                 .mandelbrot_camera
                 .pos_screen_to_world(mouse_pos, rect.center());
         }
 
-        if response.hovered() {
-            let zoom_delta = ctx.input(|i| i.zoom_delta());
-            if zoom_delta != 1.0
-                && let Some(mouse_pos) = ctx.input(|i| i.pointer.hover_pos())
-            {
-                // Convert mouse to world before zoom
-                let world_before = self
-                    .mandelbrot_camera
-                    .pos_screen_to_world(mouse_pos, rect.center());
-
-                self.mandelbrot_camera.zoom *= zoom_delta;
-                self.mandelbrot_camera.zoom = self.mandelbrot_camera.zoom.clamp(0.1, 100000000.0);
-
-                // Convert again after zoom
-                let world_after = self
-                    .mandelbrot_camera
-                    .pos_screen_to_world(mouse_pos, rect.center());
-
-                // Adjust offset so zoom centers on cursor
-                self.mandelbrot_camera.center += world_before - world_after;
-            }
-        }
-
-        if response.dragged_by(egui::PointerButton::Primary) {
-            let delta = ctx.input(|i| i.pointer.delta());
-            self.mandelbrot_camera.center -= self.mandelbrot_camera.vec_screen_to_world(delta);
-        }
+        Self::register_pan_and_zoom(rect, &response, ctx, &mut self.mandelbrot_camera);
 
         self.mandelbrot_painter.paint(
             ui,
@@ -231,38 +204,48 @@ impl MandelApp {
         );
     }
 
-    fn ui_juliaset(&mut self, ui: &mut egui::Ui) {
-        let (rect, response) = ui.allocate_exact_size(ui.available_size(), Sense::drag());
-
-        let ctx = ui.ctx();
-
+    fn register_pan_and_zoom(
+        rect: egui::Rect,
+        response: &egui::Response,
+        ctx: &egui::Context,
+        camera: &mut Camera,
+    ) {
         if response.hovered() {
-            let zoom_delta = ctx.input(|i| i.zoom_delta());
+            let scroll_zoom_speed = ctx.options(|opt| opt.input_options.scroll_zoom_speed);
+            let scroll_delta = ctx.input(|i| i.smooth_scroll_delta.x + i.smooth_scroll_delta.y);
+
+            let mut zoom_delta = ctx.input(|i| i.zoom_delta());
+            zoom_delta += scroll_delta * scroll_zoom_speed;
+
             if zoom_delta != 1.0
                 && let Some(mouse_pos) = ctx.input(|i| i.pointer.hover_pos())
             {
                 // Convert mouse to world before zoom
-                let world_before = self
-                    .juliaset_camera
-                    .pos_screen_to_world(mouse_pos, rect.center());
+                let world_before = camera.pos_screen_to_world(mouse_pos, rect.center());
 
-                self.juliaset_camera.zoom *= zoom_delta;
-                self.juliaset_camera.zoom = self.juliaset_camera.zoom.clamp(0.1, 100000000.0);
+                camera.zoom *= zoom_delta;
+                camera.zoom = camera.zoom.clamp(0.1, 100000000.0);
 
                 // Convert again after zoom
-                let world_after = self
-                    .juliaset_camera
-                    .pos_screen_to_world(mouse_pos, rect.center());
+                let world_after = camera.pos_screen_to_world(mouse_pos, rect.center());
 
                 // Adjust offset so zoom centers on cursor
-                self.juliaset_camera.center += world_before - world_after;
+                camera.center += world_before - world_after;
             }
         }
 
         if response.dragged_by(egui::PointerButton::Primary) {
             let delta = ctx.input(|i| i.pointer.delta());
-            self.juliaset_camera.center -= self.juliaset_camera.vec_screen_to_world(delta);
+            camera.center -= camera.vec_screen_to_world(delta);
         }
+    }
+
+    fn ui_juliaset(&mut self, ui: &mut egui::Ui) {
+        let (rect, response) = ui.allocate_exact_size(ui.available_size(), Sense::drag());
+
+        let ctx = ui.ctx();
+
+        Self::register_pan_and_zoom(rect, &response, ctx, &mut self.juliaset_camera);
 
         self.juliaset_painter.paint(
             ui,
