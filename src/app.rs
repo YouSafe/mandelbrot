@@ -109,7 +109,7 @@ impl eframe::App for MandelApp {
 
             ui.separator();
 
-            ui.heading("Camera");
+            ui.heading("Mandelbrot Camera");
 
             ui.horizontal(|ui| {
                 ui.add(DragValue::new(&mut self.mandelbrot_camera.center.x).min_decimals(9));
@@ -126,10 +126,36 @@ impl eframe::App for MandelApp {
                 ui.label("Zoom");
             });
 
-            if ui.button("Reset").clicked() {
+            if ui.button("Reset to default").clicked() {
                 self.mandelbrot_camera = Camera {
                     center: Pos2::new(-0.5, 0.0),
                     zoom: 500.0,
+                }
+            }
+
+            ui.separator();
+
+            ui.heading("Julia Set Camera");
+
+            ui.horizontal(|ui| {
+                ui.add(DragValue::new(&mut self.juliaset_camera.center.x).min_decimals(9));
+                ui.label("Real");
+            });
+
+            ui.horizontal(|ui| {
+                ui.add(DragValue::new(&mut self.juliaset_camera.center.y).min_decimals(9));
+                ui.label("Imaginary");
+            });
+
+            ui.horizontal(|ui| {
+                ui.add(DragValue::new(&mut self.juliaset_camera.zoom));
+                ui.label("Zoom");
+            });
+
+            if ui.button("Reset to default").clicked() {
+                self.juliaset_camera = Camera {
+                    center: Pos2::new(0.0, 0.0),
+                    zoom: 125.0,
                 }
             }
 
