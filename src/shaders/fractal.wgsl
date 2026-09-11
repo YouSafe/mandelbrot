@@ -42,7 +42,6 @@ fn pick_color(i: u32) -> vec3f {
     return select(vec3f(0), PALETTE[i % PALETTE_SIZE], i < data.max_iters && i > 0);
 }
 
-
 @vertex
 fn vs_main(@builtin(vertex_index) vertex_index: u32) -> VertexOutput {
     var pos = array<vec2<f32>, 3>(

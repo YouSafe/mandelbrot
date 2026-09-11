@@ -3,7 +3,10 @@ use egui::vec2;
 
 #[derive(Debug)]
 pub struct Camera {
+    /// Center in world space
     pub center: egui::Pos2,
+
+    /// Zoom in world space
     pub zoom: f32,
 }
 

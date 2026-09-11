@@ -1,19 +1,20 @@
 #![warn(clippy::all, rust_2018_idioms)]
-#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")] // hide console window on Windows in release
+// hide console window on Windows in release
+#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 // When compiling natively:
 #[cfg(not(target_arch = "wasm32"))]
 fn main() -> eframe::Result {
     use mandel::MandelApp;
 
-    env_logger::init(); // Log to stderr (if you run with `RUST_LOG=debug`).
+    // Log to stderr (if you run with `RUST_LOG=debug`).
+    env_logger::init();
 
     let native_options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
             .with_inner_size([400.0, 300.0])
             .with_min_inner_size([300.0, 220.0])
             .with_icon(
-                // NOTE: Adding an icon is optional
                 eframe::icon_data::from_png_bytes(
                     &include_bytes!("../assets/favicon-512x512.png")[..],
                 )

@@ -162,6 +162,7 @@ impl CallbackTrait for RenderCallback {
         _egui_encoder: &mut eframe::wgpu::CommandEncoder,
         _callback_resources: &mut eframe::egui_wgpu::CallbackResources,
     ) -> Vec<eframe::wgpu::CommandBuffer> {
+        // Update Uniform buffer
         queue.write_buffer(
             &self.uniform_buffer,
             0,
@@ -180,8 +181,11 @@ impl CallbackTrait for RenderCallback {
         let resources = callback_resources
             .get::<PainterResources>()
             .expect("resources set by FractalPainter");
+
         render_pass.set_pipeline(&resources.pipeline);
         render_pass.set_bind_group(0, &self.bind_group, &[]);
+
+        // Draw single triangle covering the whole screen
         render_pass.draw(0..3, 0..1);
     }
 }

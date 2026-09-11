@@ -5,6 +5,17 @@ use crate::{
     painter::{FractalPainter, PainterUniform},
 };
 
+pub struct MandelApp {
+    juliaset_painter: FractalPainter,
+    juliaset_settings: JuliaSetBrotSettings,
+    juliaset_camera: Camera,
+
+    mandelbrot_painter: FractalPainter,
+    mandelbrot_settings: MandelbrotSettings,
+    mandelbrot_camera: Camera,
+    frames: u32,
+}
+
 pub struct MandelbrotSettings {
     max_iterations: u32,
 }
@@ -31,17 +42,6 @@ impl Default for JuliaSetBrotSettings {
             is_floating: true,
         }
     }
-}
-
-pub struct MandelApp {
-    juliaset_painter: FractalPainter,
-    juliaset_settings: JuliaSetBrotSettings,
-    juliaset_camera: Camera,
-
-    mandelbrot_painter: FractalPainter,
-    mandelbrot_settings: MandelbrotSettings,
-    mandelbrot_camera: Camera,
-    frames: u32,
 }
 
 impl MandelApp {
