@@ -35,6 +35,7 @@ Support for WebGPU (default if supported), WebGL (fallback), Vulkan (Desktop)
 
 ## Software used
 
+- eframe_template: project template for using egui.
 - wgpu: cross-platform graphics API.
-- Egui: immediate mode GUI in Rust.
+- egui: immediate mode GUI in Rust.
 - trunk: build wasm for web version.

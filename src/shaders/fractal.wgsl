@@ -83,19 +83,18 @@ fn fs_main(in: FragmentInput) -> @location(0) vec4f {
 
     var i: u32;
     for (i = 0u; i < data.max_iters; i++) {
+        // z_(n+1) = (z_n)^2 + c
         z = vec2f(
             z.x * z.x - z.y * z.y + c.x,
             z.y * z.x + z.x * z.y + c.y
         );
 
+        // squared magnitude
         let z_mag_sq = dot(z, z);
         if (z_mag_sq > 64.0) {
             break;
         }
     }
 
-    // let t = log(f32(i)) / log(f32(data.max_iters));
-
-    // let color = select(vec3f(0.0), data.base_color * t, i < data.max_iters);
     return vec4(pick_color(i), 1.0);
 }
