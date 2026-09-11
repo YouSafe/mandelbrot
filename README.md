@@ -1,6 +1,6 @@
 # Mandel
 
-![Screenshot](Screenshot_20260910_060406.png)
+![Screenshot](Screenshot.png)
 
 Live-Demo: https://yousafe.github.io/mandelbrot/
 
